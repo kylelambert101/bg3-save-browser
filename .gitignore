@@ -1,0 +1,80 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/projectSettingsUpdater.xml
+/contentModel.xml
+/modules.xml
+/.idea.BG3SaveBrowser.iml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+
+
+# Ignore Visual Studio specific files
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore build outputs
+**/bin/
+**/obj/
+[Bb]uild[Ll]og.*
+*.log
+*.tlog
+*.lastbuildstate
+
+# Ignore NuGet packages
+*.nupkg
+packages/
+*.snupkg
+# Uncomment if you have package management enabled
+# /packages/*
+
+# Ignore Mac and Windows file clutter
+*.DS_Store
+Thumbs.db
+
+# Ignore application insights config
+ApplicationInsights.config
+
+# Ignore publish output
+publish/
+app.publish/
+
+# Ignore Rider and JetBrains specific files
+.idea/
+*.sln.iml
+
+# Ignore Resharper files
+_ReSharper/
+*.DotSettings.user
+
+# Ignore Test Results
+TestResults/
+
+# Ignore local configuration files
+*.config.user
+
+# Ignore auto-generated AssemblyInfo files (if using auto versioning)
+Properties/AssemblyInfo.cs
+
+# Ignore log files
+*.log
+
+# Ignore additional build artifacts
+*.ilk
+*.pdb
+*.ipdb
+*.iobj
+
+# Ignore Crash Dumps
+*.dmp
+
+# Ignore markdown lint settings (if any)
+.markdownlint.json
