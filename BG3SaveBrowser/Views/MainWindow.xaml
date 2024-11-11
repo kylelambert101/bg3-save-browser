@@ -10,19 +10,20 @@
                 <TextBox Name="DirectoryPathTextBox" Width="600" IsReadOnly="True" />
             </StackPanel>
 
-            <ListView Name="FilesListView" Margin="10">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Owner" DisplayMemberBinding="{Binding Owner}" Width="100" />
-                        <GridViewColumn Header="Save Name" DisplayMemberBinding="{Binding SaveName}" Width="200" />
-                        <GridViewColumn Header="Game Id" DisplayMemberBinding="{Binding GameId}" Width="200" />
-                        <GridViewColumn Header="Game Session Id" DisplayMemberBinding="{Binding GameSessionId}"
-                                        Width="200" />
-                        <GridViewColumn Header="Save Time" DisplayMemberBinding="{Binding SaveTime}" Width="200" />
-                        <GridViewColumn Header="TimeStamp" DisplayMemberBinding="{Binding TimeStampInt}" Width="200" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="10">
+                <ListView Name="FilesListView" Height="600"> <!-- Explicit height for scrolling -->
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Owner" DisplayMemberBinding="{Binding Owner}" Width="100" />
+                            <GridViewColumn Header="Save Name" DisplayMemberBinding="{Binding SaveName}" Width="200" />
+                            <GridViewColumn Header="Game Id" DisplayMemberBinding="{Binding GameId}" Width="200" />
+                            <GridViewColumn Header="Game Session Id" DisplayMemberBinding="{Binding GameSessionId}" Width="200" />
+                            <GridViewColumn Header="Save Time" DisplayMemberBinding="{Binding SaveTime}" Width="200" />
+                            <GridViewColumn Header="TimeStamp" DisplayMemberBinding="{Binding TimeStampInt}" Width="200" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </ScrollViewer>
         </StackPanel>
     </Grid>
 </Window>
