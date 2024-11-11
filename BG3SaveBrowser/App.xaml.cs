@@ -22,10 +22,8 @@ public partial class App : Application
         var serviceCollection = new ServiceCollection();
 
         // Register your services
-        serviceCollection.AddSingleton<FileProcessor>(); // Register GameSaveService for DI
-
-        // Register your other services and view models here if needed
-
+        serviceCollection.AddSingleton<FileProcessor>();
+        
         // Build the service provider
         ServiceProvider = serviceCollection.BuildServiceProvider();
     }

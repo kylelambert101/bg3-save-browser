@@ -19,22 +19,22 @@ public partial class MainWindow : Window
         FilesListView.ItemsSource = Files;
     }
 
-    private ObservableCollection<FileItem> Files { get; set; } = new();
+    private ObservableCollection<GameSave> Files { get; set; } = new();
 
-    private void BrowseButton_Click(object sender, RoutedEventArgs e)
+    private async void BrowseButton_Click(object sender, RoutedEventArgs e)
     {
         using var folderDialog = new FolderBrowserDialog();
         if (folderDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
         
         var selectedPath = folderDialog.SelectedPath;
         DirectoryPathTextBox.Text = selectedPath;
-        LoadFiles(selectedPath);
+        await LoadFiles(selectedPath);
     }
 
-    private void LoadFiles(string directoryPath)
+    private async Task LoadFiles(string directoryPath)
     {
         Files.Clear();
-        foreach (var x in _fileProcessor.ProcessPath(directoryPath))
+        foreach (var x in await _fileProcessor.ProcessPath(directoryPath))
         {
             Files.Add(x);
         }
