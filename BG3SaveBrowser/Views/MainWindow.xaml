@@ -15,6 +15,7 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="File Name" DisplayMemberBinding="{Binding Name}" Width="300" />
+                        <GridViewColumn Header="Owner" DisplayMemberBinding="{Binding Owner}" Width="300" />
                         <GridViewColumn Header="Last Modified" DisplayMemberBinding="{Binding LastModifiedDate}" Width="450" />
                     </GridView>
                 </ListView.View>

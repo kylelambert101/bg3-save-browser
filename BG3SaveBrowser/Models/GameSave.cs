@@ -1,15 +1,18 @@
 ﻿namespace BG3SaveBrowser.Models;
 
-public record GameSave(
+public record GameSave
+{
+    // TODO make a respectable constructor and enforce non-null state on applicable properties
+    
     // Comes from meta.lsf
-    string Path,
-    string ThumbnailPath,
-    string Owner,
-    int TimeStamp,
-    Guid GameId,
-    Guid GameSessionId,
-    long SaveTime,
+    public string? Path { get; set; }
+    public string? ThumbnailPath { get; set; }
+    public string? Owner { get; set; }
+    public int TimeStamp { get; set; }
+    public Guid GameId { get; set; }
+    public Guid GameSessionId { get; set; }
+    public long SaveTime { get; set; }
 
     // Comes from SaveInfo.json
-    string SaveName
-);
+    public string? SaveName { get; set; }
+}

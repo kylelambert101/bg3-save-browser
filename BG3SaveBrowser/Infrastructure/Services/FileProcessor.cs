@@ -1,9 +1,11 @@
 ﻿using BG3SaveBrowser.Models;
+using LSLib.LS.Story;
 
 namespace BG3SaveBrowser.Infrastructure.Services;
 
 using System.Collections.Generic;
 using System.IO;
+using LSLib.LS;
 
 public class FileProcessor
 {
@@ -36,6 +38,10 @@ public class FileProcessor
             foreach (var file in files)
             {
                 fileNames.Add(Path.GetFileName(file));
+                if (file.EndsWith(".lsv"))
+                {
+                    item.Owner = ProcessLSVPackage(file);
+                }
             }
             item.FileCount = fileNames.Count;
             item.LastModifiedDate = File.GetLastWriteTime(subdirectory);
@@ -45,5 +51,31 @@ public class FileProcessor
         }
 
         return result;
+    }
+
+    private string? ProcessLSVPackage(string filePath)
+    {
+        string? owner = null;
+        var reader = new PackageReader();
+        var package = reader.Read(filePath);
+        var metaInfo = package.Files.FirstOrDefault(p => p.Name.ToLowerInvariant() == "meta.lsf");
+        if (metaInfo == null)
+        {
+            throw new InvalidDataException("The specified package is not a valid savegame (meta.lsf not found)");
+        }
+
+        using var rsrcStream = metaInfo.CreateContentReader();
+        using var rsrcReader = new LSFReader(rsrcStream);
+        var metaResource = rsrcReader.Read();
+        foreach (var kvp in metaResource.Regions["MetaData"].Children["MetaData"].First().Attributes)
+        {
+            var (k,v) = kvp;
+            if (k == "LeaderName")
+            {
+                owner = v.Value.ToString();
+            }
+        }
+        package.Dispose();
+        return owner;
     }
 }

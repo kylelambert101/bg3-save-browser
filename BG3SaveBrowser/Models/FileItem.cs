@@ -9,4 +9,6 @@ public class FileItem
 
     public DateTime LastModifiedDate { get; set; }
     
+    public string? Owner { get; set; }
+    
 }

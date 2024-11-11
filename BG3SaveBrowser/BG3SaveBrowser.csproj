@@ -17,4 +17,19 @@
       </Page>
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="LSLib">
+        <HintPath>lib\LSLib.dll</HintPath>
+      </Reference>
+      <Reference Include="LSLibNative">
+        <HintPath>lib\LSLibNative.dll</HintPath>
+      </Reference>
+      <Reference Include="LZ4">
+        <HintPath>lib\LZ4.dll</HintPath>
+      </Reference>
+      <Reference Include="ZstdSharp">
+        <HintPath>lib\ZstdSharp.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
