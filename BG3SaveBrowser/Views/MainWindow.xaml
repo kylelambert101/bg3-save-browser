@@ -1,4 +1,4 @@
-﻿<Window x:Class="BG3SaveBrowser.MainWindow"
+﻿<Window x:Class="BG3SaveBrowser.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="BG3 Save Browser" Height="450" Width="800">
@@ -15,7 +15,7 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="File Name" DisplayMemberBinding="{Binding Name}" Width="300" />
-                        <GridViewColumn Header="File Path" DisplayMemberBinding="{Binding Path}" Width="450" />
+                        <GridViewColumn Header="Last Modified" DisplayMemberBinding="{Binding LastModifiedDate}" Width="450" />
                     </GridView>
                 </ListView.View>
             </ListView>
