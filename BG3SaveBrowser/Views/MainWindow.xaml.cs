@@ -3,14 +3,19 @@ using System.IO;
 using System.Windows;
 using BG3SaveBrowser.Infrastructure.Services;
 using BG3SaveBrowser.Models;
+using Microsoft.Extensions.DependencyInjection;
 using Path = System.IO.Path;
 
 namespace BG3SaveBrowser.Views;
 public partial class MainWindow : Window
 {
+    private readonly FileProcessor _fileProcessor;
     public MainWindow()
     {
         InitializeComponent();
+
+        // Get the instance of GameSaveService from the DI container
+        _fileProcessor = App.ServiceProvider.GetRequiredService<FileProcessor>();
         FilesListView.ItemsSource = Files;
     }
 
@@ -28,9 +33,8 @@ public partial class MainWindow : Window
 
     private void LoadFiles(string directoryPath)
     {
-        var processor = new FileProcessor();
         Files.Clear();
-        foreach (var x in processor.ProcessPath(directoryPath))
+        foreach (var x in _fileProcessor.ProcessPath(directoryPath))
         {
             Files.Add(x);
         }
