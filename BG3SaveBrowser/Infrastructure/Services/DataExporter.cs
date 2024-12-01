@@ -33,13 +33,22 @@ public class DataExporter
                     )";
             await ExecuteNonQueryAsync(connection, createTableCmd);
 
+            const string insertCmd = @"
+                INSERT INTO GameSaves (SaveName, Owner, TimeStamp, GameId, GameSessionId, SaveTime)
+                VALUES (@SaveName, @Owner, @TimeStamp, @GameId, @GameSessionId, @SaveTime)";
+            
             // Insert data
             foreach (var file in files)
             {
-                var insertCmd = $@"
-                        INSERT INTO GameSaves (SaveName, Owner, TimeStamp, GameId, GameSessionId, SaveTime)
-                        VALUES ('{file.SaveName}', '{file.Owner}', {file.TimeStampInt}, '{file.GameId}', '{file.GameSessionId}', {file.SaveTime})";
-                await ExecuteNonQueryAsync(connection, insertCmd);
+                await using var cmd = new SQLiteCommand(insertCmd, connection);
+                cmd.Parameters.AddWithValue("@SaveName", file.SaveName);
+                cmd.Parameters.AddWithValue("@Owner", file.Owner);
+                cmd.Parameters.AddWithValue("@TimeStamp", file.TimeStampInt);
+                cmd.Parameters.AddWithValue("@GameId", file.GameId);
+                cmd.Parameters.AddWithValue("@GameSessionId", file.GameSessionId);
+                cmd.Parameters.AddWithValue("@SaveTime", file.SaveTime);
+
+                await cmd.ExecuteNonQueryAsync();
             }
         }
     }
@@ -59,7 +68,7 @@ public class DataExporter
         var saveDialog = new SaveFileDialog
         {
             Title = "Select export location",
-            Filter = "SQLite Database (*.db)|*.db|CSV File (*.csv)|*.csv",
+            Filter = "SQLite Database (*.db)|*.db",
             FileName = "export" // Default export file name
         };
 
