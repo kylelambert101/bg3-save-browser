@@ -44,10 +44,8 @@ public class FileProcessor
             result.Add(item);
 
             // Report progress
-            processedSubdirectories++;
-            var progressValue = (int)((processedSubdirectories / (double)totalSubdirectories) * 100);
+            var progressValue = (int)((processedSubdirectories++ / (double)totalSubdirectories) * 100);
             progress?.Report((progressValue, $"Processing folder: {Path.GetFileName(subdirectory)}"));
-            Console.WriteLine($"Reported progress: {progressValue}%");
         }
 
         return result;

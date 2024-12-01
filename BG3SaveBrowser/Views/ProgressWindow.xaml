@@ -9,9 +9,8 @@
         WindowStartupLocation="CenterScreen"
         SizeToContent="WidthAndHeight"
         ResizeMode="NoResize"
-        MinWidth="300"> <!-- Set a minimum width -->
+        MinWidth="300">
     <StackPanel Margin="10">
-        <!-- Fix the width of the TextBlock or allow wrapping -->
         <TextBlock Name="StatusText" Text="Processing files..." Margin="0,0,0,10" 
                    Width="275" TextTrimming="CharacterEllipsis" />
         <ProgressBar Name="FileProgressBar" Height="20" Minimum="0" Maximum="100" 
