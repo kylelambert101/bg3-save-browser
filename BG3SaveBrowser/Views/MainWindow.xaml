@@ -8,6 +8,7 @@
             <StackPanel Orientation="Horizontal" Margin="10">
                 <Button Name="BrowseButton" Content="Browse" Width="75" Margin="0,0,10,0" Click="BrowseButton_Click" />
                 <TextBox Name="DirectoryPathTextBox" Width="600" IsReadOnly="True" />
+                <Button Content="Export Data" Width="80" Click="ExportButton_Click" Margin="10,0,0,0"/>
             </StackPanel>
 
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="10">

@@ -11,11 +11,15 @@ namespace BG3SaveBrowser.Views;
 public partial class MainWindow : Window
 {
     private readonly FileProcessor _fileProcessor;
+    private readonly DataExporter _dataExporter;
+    
     public MainWindow()
     {
         InitializeComponent();
 
         _fileProcessor = App.ServiceProvider.GetRequiredService<FileProcessor>();
+        _dataExporter = App.ServiceProvider.GetRequiredService<DataExporter>();
+        
         FilesListView.ItemsSource = Files;
     }
 
@@ -29,6 +33,12 @@ public partial class MainWindow : Window
         var selectedPath = folderDialog.SelectedPath;
         DirectoryPathTextBox.Text = selectedPath;
         await LoadFiles(selectedPath);
+    }
+    
+    private async void ExportButton_Click(object sender, RoutedEventArgs e)
+    {
+        // Use DataExporter to export data to CSV and SQLite
+        await _dataExporter.ExportData(Files);
     }
 
     private async Task LoadFiles(string directoryPath)

@@ -22,7 +22,10 @@ public partial class App : Application
         var serviceCollection = new ServiceCollection();
 
         // Register your services
-        serviceCollection.AddSingleton<FileProcessor>();
+        serviceCollection
+            .AddSingleton<FileProcessor>()
+            .AddSingleton<DataExporter>();
+        
         
         // Build the service provider
         ServiceProvider = serviceCollection.BuildServiceProvider();
