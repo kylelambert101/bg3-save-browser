@@ -8,9 +8,13 @@
         Title="Processing Files"
         WindowStartupLocation="CenterScreen"
         SizeToContent="WidthAndHeight"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        MinWidth="300"> <!-- Set a minimum width -->
     <StackPanel Margin="10">
-        <TextBlock Name="StatusText" Text="Processing files..." Margin="0,0,0,10"/>
-        <ProgressBar Name="FileProgressBar" Height="20" Minimum="0" Maximum="100" IsIndeterminate="False" Width="200"/>
+        <!-- Fix the width of the TextBlock or allow wrapping -->
+        <TextBlock Name="StatusText" Text="Processing files..." Margin="0,0,0,10" 
+                   Width="275" TextTrimming="CharacterEllipsis" />
+        <ProgressBar Name="FileProgressBar" Height="20" Minimum="0" Maximum="100" 
+                     IsIndeterminate="False" Width="275"/>
     </StackPanel>
 </Window>

@@ -4,6 +4,7 @@ using System.Windows;
 using BG3SaveBrowser.Infrastructure.Services;
 using BG3SaveBrowser.Models;
 using Microsoft.Extensions.DependencyInjection;
+using MessageBox = System.Windows.MessageBox;
 using Path = System.IO.Path;
 
 namespace BG3SaveBrowser.Views;
@@ -36,32 +37,37 @@ public partial class MainWindow : Window
         var progressWindow = new ProgressWindow();
         progressWindow.Show();
 
+        // Create a progress reporter
+        var progressReporter = new Progress<(int progress, string status)>(update =>
+        {
+            progressWindow.Dispatcher.Invoke(() =>
+            {
+                progressWindow.UpdateProgress(update.progress, update.status);
+            });
+        });
+
         try
         {
+            // Run the file processing on a background thread
+            var files = await Task.Run(() => _fileProcessor.ProcessPath(directoryPath, progressReporter));
+
+            // Add the processed files to the list
             Files.Clear();
-
-            // Create a progress reporter
-            var progressReporter = new Progress<(int progress, string status)>(update =>
-            {
-                progressWindow.Dispatcher.Invoke(() =>
-                {
-                    Console.WriteLine($"UI Update: {update.progress}% - {update.status}");
-                    progressWindow.UpdateProgress(update.progress, update.status);
-                });
-            });
-
-            // Pass the progress reporter to the FileProcessor
-            var files = await _fileProcessor.ProcessPath(directoryPath, progressReporter);
-
             foreach (var file in files)
             {
                 Files.Add(file);
             }
+        }
+        catch (Exception ex)
+        {
+            // Handle any errors here (e.g., log them or show a message to the user)
+            MessageBox.Show($"Error: {ex.Message}");
         }
         finally
         {
             progressWindow.Close();
         }
     }
+
 
 }
