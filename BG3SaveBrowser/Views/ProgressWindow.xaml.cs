@@ -8,4 +8,10 @@ public partial class ProgressWindow : Window
     {
         InitializeComponent();
     }
+
+    public void UpdateProgress(int progress, string status)
+    {
+        FileProgressBar.Value = progress;
+        StatusText.Text = status;
+    }
 }

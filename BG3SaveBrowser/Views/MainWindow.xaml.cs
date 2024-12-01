@@ -33,10 +33,35 @@ public partial class MainWindow : Window
 
     private async Task LoadFiles(string directoryPath)
     {
-        Files.Clear();
-        foreach (var x in await _fileProcessor.ProcessPath(directoryPath))
+        var progressWindow = new ProgressWindow();
+        progressWindow.Show();
+
+        try
         {
-            Files.Add(x);
+            Files.Clear();
+
+            // Create a progress reporter
+            var progressReporter = new Progress<(int progress, string status)>(update =>
+            {
+                progressWindow.Dispatcher.Invoke(() =>
+                {
+                    Console.WriteLine($"UI Update: {update.progress}% - {update.status}");
+                    progressWindow.UpdateProgress(update.progress, update.status);
+                });
+            });
+
+            // Pass the progress reporter to the FileProcessor
+            var files = await _fileProcessor.ProcessPath(directoryPath, progressReporter);
+
+            foreach (var file in files)
+            {
+                Files.Add(file);
+            }
+        }
+        finally
+        {
+            progressWindow.Close();
         }
     }
+
 }

@@ -5,8 +5,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:BG3SaveBrowser.Views"
         mc:Ignorable="d"
-        Title="ProgressWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="Processing Files"
+        WindowStartupLocation="CenterScreen"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize">
+    <StackPanel Margin="10">
+        <TextBlock Name="StatusText" Text="Processing files..." Margin="0,0,0,10"/>
+        <ProgressBar Name="FileProgressBar" Height="20" Minimum="0" Maximum="100" IsIndeterminate="False" Width="200"/>
+    </StackPanel>
 </Window>

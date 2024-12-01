@@ -7,7 +7,7 @@ namespace BG3SaveBrowser.Infrastructure.Services;
 
 public class FileProcessor
 {
-    public async Task<List<GameSave>> ProcessPath(string baseDirectory)
+    public async Task<List<GameSave>> ProcessPath(string baseDirectory, IProgress<(int progress, string status)>? progress = null)
     {
         var result = new List<GameSave>();
 
@@ -18,32 +18,41 @@ public class FileProcessor
         // Get all subdirectories in the base directory
         var subdirectories = Directory.GetDirectories(baseDirectory);
 
+        var totalSubdirectories = subdirectories.Length;
+        var processedSubdirectories = 0;
+
         foreach (var subdirectory in subdirectories)
         {
-            var item = new GameSave();
-
-            // Get the name of the subdirectory (not the full path)
-            item.Path = subdirectory;
+            var item = new GameSave { Path = subdirectory };
 
             // Get all files in the subdirectory
             var files = Directory.GetFiles(subdirectory);
 
-            // Add file names to the list
             foreach (var file in files)
             {
                 if (file.EndsWith(".lsv"))
                 {
                     await ProcessLSVPackage(file, item);
-                } else if (file.EndsWith(".webp")) item.ThumbnailPath = file;
+                }
+                else if (file.EndsWith(".webp"))
+                {
+                    item.ThumbnailPath = file;
+                }
             }
 
-
-            // Add to the result dictionary
+            // Add to the result list
             result.Add(item);
+
+            // Report progress
+            processedSubdirectories++;
+            var progressValue = (int)((processedSubdirectories / (double)totalSubdirectories) * 100);
+            progress?.Report((progressValue, $"Processing folder: {Path.GetFileName(subdirectory)}"));
+            Console.WriteLine($"Reported progress: {progressValue}%");
         }
 
         return result;
     }
+
 
     private async Task ProcessLSVPackage(string filePath, GameSave gameSave)
     {
