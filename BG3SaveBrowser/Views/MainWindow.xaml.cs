@@ -70,6 +70,7 @@ public partial class MainWindow : Window
         catch (Exception ex)
         {
             MessageBox.Show($"Error loading files: {ex.Message}");
+            Console.WriteLine(ex);
         }
         finally
         {

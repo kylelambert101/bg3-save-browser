@@ -23,25 +23,16 @@ public class FileProcessor
 
         foreach (var subdirectory in subdirectories)
         {
-            var item = new GameSave { Path = subdirectory };
-
-            // Get all files in the subdirectory
-            var files = Directory.GetFiles(subdirectory);
-
-            foreach (var file in files)
+            try
             {
-                if (file.EndsWith(".lsv"))
-                {
-                    await ProcessLSVPackage(file, item);
-                }
-                else if (file.EndsWith(".webp"))
-                {
-                    item.ThumbnailPath = file;
-                }
+                // Add to the result list
+                result.Add(await ProcessSaveDirectory(subdirectory));
             }
-
-            // Add to the result list
-            result.Add(item);
+            catch
+            {
+                //TODO Use a logger
+                Console.WriteLine($"Failed to process directory: {subdirectory}");
+            }
 
             // Report progress
             var progressValue = (int)((processedSubdirectories++ / (double)totalSubdirectories) * 100);
@@ -51,8 +42,32 @@ public class FileProcessor
         return result;
     }
 
+    private static async Task<GameSave> ProcessSaveDirectory(string directory)
+    {
+        var item = new GameSave { Path = directory };
 
-    private async Task ProcessLSVPackage(string filePath, GameSave gameSave)
+        // Get all files in the directory
+        var files = Directory.GetFiles(directory);
+
+        foreach (var file in files)
+        {
+            if (file.EndsWith(".lsv"))
+            {
+                await ProcessLsvPackage(file, item);
+            }
+            else if (file.EndsWith(".webp"))
+            {
+                item.ThumbnailPath = file;
+            }
+        }
+        
+        // TODO Throw if item doesn't have all expected data (i.e. the directory was bad)
+
+        return item;
+    }
+
+
+    private static async Task ProcessLsvPackage(string filePath, GameSave gameSave)
     {
         var reader = new PackageReader();
         var package = reader.Read(filePath);
