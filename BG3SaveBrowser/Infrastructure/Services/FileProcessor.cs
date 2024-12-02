@@ -27,7 +27,7 @@ public class FileProcessor
 
         foreach (var subdirectory in subdirectories)
         {
-            _logger.LogDebug("Processing directory {Dir}",subdirectory);
+            _logger.LogTrace("Processing directory {Dir}",subdirectory);
             try
             {
                 // Add to the result list
