@@ -2,11 +2,15 @@
 using System.Text.Json;
 using BG3SaveBrowser.Models;
 using LSLib.LS;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace BG3SaveBrowser.Infrastructure.Services;
 
 public class FileProcessor
 {
+    private readonly ILogger<FileProcessor> _logger = App.ServiceProvider.GetRequiredService<ILogger<FileProcessor>>();
+
     public async Task<List<GameSave>> ProcessPath(string baseDirectory, IProgress<(int progress, string status)>? progress = null)
     {
         var result = new List<GameSave>();
@@ -23,15 +27,15 @@ public class FileProcessor
 
         foreach (var subdirectory in subdirectories)
         {
+            _logger.LogDebug("Processing directory {Dir}",subdirectory);
             try
             {
                 // Add to the result list
                 result.Add(await ProcessSaveDirectory(subdirectory));
             }
-            catch
+            catch (Exception ex)
             {
-                //TODO Use a logger
-                Console.WriteLine($"Failed to process directory: {subdirectory}");
+                _logger.LogError(ex, "Failed to process directory: {Directory}", subdirectory);
             }
 
             // Report progress
@@ -42,7 +46,7 @@ public class FileProcessor
         return result;
     }
 
-    private static async Task<GameSave> ProcessSaveDirectory(string directory)
+    private async Task<GameSave> ProcessSaveDirectory(string directory)
     {
         var item = new GameSave { Path = directory };
 
@@ -67,7 +71,7 @@ public class FileProcessor
     }
 
 
-    private static async Task ProcessLsvPackage(string filePath, GameSave gameSave)
+    private async Task ProcessLsvPackage(string filePath, GameSave gameSave)
     {
         var reader = new PackageReader();
         var package = reader.Read(filePath);
@@ -86,7 +90,7 @@ public class FileProcessor
         catch (JsonException ex)
         {
             // Handle any JSON deserialization errors
-            Console.WriteLine($"Error deserializing JSON: {ex.Message}");
+            _logger.LogError(ex,"Error deserializing JSON");
         }
         
         // Process meta

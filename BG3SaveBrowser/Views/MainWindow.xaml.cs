@@ -4,6 +4,7 @@ using System.Windows;
 using BG3SaveBrowser.Infrastructure.Services;
 using BG3SaveBrowser.Models;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using MessageBox = System.Windows.MessageBox;
 using Path = System.IO.Path;
 
@@ -12,6 +13,7 @@ public partial class MainWindow : Window
 {
     private readonly FileProcessor _fileProcessor;
     private readonly DataExporter _dataExporter;
+    private readonly ILogger<MainWindow> _logger;
     
     public MainWindow()
     {
@@ -19,6 +21,7 @@ public partial class MainWindow : Window
 
         _fileProcessor = App.ServiceProvider.GetRequiredService<FileProcessor>();
         _dataExporter = App.ServiceProvider.GetRequiredService<DataExporter>();
+        _logger = App.ServiceProvider.GetRequiredService<ILogger<MainWindow>>();
         
         FilesListView.ItemsSource = Files;
     }
@@ -70,7 +73,7 @@ public partial class MainWindow : Window
         catch (Exception ex)
         {
             MessageBox.Show($"Error loading files: {ex.Message}");
-            Console.WriteLine(ex);
+            _logger.LogError(ex, "Error loading files");
         }
         finally
         {

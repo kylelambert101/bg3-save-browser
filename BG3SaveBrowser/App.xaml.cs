@@ -1,5 +1,7 @@
 ﻿using BG3SaveBrowser.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using Application = System.Windows.Application;
 
 namespace BG3SaveBrowser;
@@ -17,7 +19,7 @@ public partial class App : Application
         ConfigureServices();
     }
 
-    private void ConfigureServices()
+    private static void ConfigureServices()
     {
         var serviceCollection = new ServiceCollection();
 
@@ -26,6 +28,19 @@ public partial class App : Application
             .AddSingleton<FileProcessor>()
             .AddSingleton<DataExporter>();
         
+        serviceCollection.AddLogging(builder =>
+        {
+            builder.ClearProviders(); // Optional: Clear default providers
+            builder.AddSimpleConsole(options =>
+            {
+                options.IncludeScopes = true;
+                options.SingleLine = true;
+                options.TimestampFormat = "HH:mm:ss ";
+                options.ColorBehavior = LoggerColorBehavior.Enabled;
+            });
+            builder.AddDebug();      // Add debug logging (visible in Output window)
+            builder.SetMinimumLevel(LogLevel.Debug);
+        });
         
         // Build the service provider
         ServiceProvider = serviceCollection.BuildServiceProvider();
