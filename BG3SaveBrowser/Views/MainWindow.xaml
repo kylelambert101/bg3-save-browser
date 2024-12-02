@@ -1,7 +1,7 @@
 ﻿<Window x:Class="BG3SaveBrowser.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="BG3 Save Browser" Height="450" Width="800">
+        Title="BG3 Save Browser" Height="450" Width="1070">
     <Grid>
         <!-- Top bar with Browse button -->
         <StackPanel Orientation="Vertical">
@@ -20,7 +20,7 @@
                             <GridViewColumn Header="Game Id" DisplayMemberBinding="{Binding GameId}" Width="200" />
                             <GridViewColumn Header="Game Session Id" DisplayMemberBinding="{Binding GameSessionId}" Width="200" />
                             <GridViewColumn Header="Save Time" DisplayMemberBinding="{Binding SaveTime}" Width="200" />
-                            <GridViewColumn Header="TimeStamp" DisplayMemberBinding="{Binding TimeStampInt}" Width="200" />
+                            <GridViewColumn Header="Campaign Duration" DisplayMemberBinding="{Binding CampaignDuration}" Width="125" />
                         </GridView>
                     </ListView.View>
                 </ListView>

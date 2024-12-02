@@ -43,7 +43,7 @@ public class DataExporter
                 await using var cmd = new SQLiteCommand(insertCmd, connection);
                 cmd.Parameters.AddWithValue("@SaveName", file.SaveName);
                 cmd.Parameters.AddWithValue("@Owner", file.Owner);
-                cmd.Parameters.AddWithValue("@TimeStamp", file.TimeStampInt);
+                cmd.Parameters.AddWithValue("@TimeStamp", file.CampaignDuration?.Seconds);
                 cmd.Parameters.AddWithValue("@GameId", file.GameId);
                 cmd.Parameters.AddWithValue("@GameSessionId", file.GameSessionId);
                 cmd.Parameters.AddWithValue("@SaveTime", file.SaveTime);

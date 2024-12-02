@@ -11,8 +11,8 @@ public record GameSave
     
     // Comes from meta.lsf
     public string? Owner { get; set; }
-    public int TimeStampInt { get; set; }
-    // public DateTime TimeStamp { get; set; }
+
+    public CampaignDuration? CampaignDuration { get; set; } 
     public string? GameId { get; set; }
     public string? GameSessionId { get; set; }
     public long SaveTime { get; set; }

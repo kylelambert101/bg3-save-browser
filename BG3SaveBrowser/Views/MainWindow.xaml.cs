@@ -18,6 +18,8 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        // Set the window to full screen
+        this.WindowState = WindowState.Maximized;
 
         _fileProcessor = App.ServiceProvider.GetRequiredService<FileProcessor>();
         _dataExporter = App.ServiceProvider.GetRequiredService<DataExporter>();

@@ -101,6 +101,8 @@ public class FileProcessor
         await using var rsrcStream = metaInfo.CreateContentReader();
         using var rsrcReader = new LSFReader(rsrcStream);
         var metaResource = rsrcReader.Read();
+        
+        // TODO This should probably be in its own file. Alternatively, make this a direct metadata record and map that to GameSave later. 
         foreach (var kvp in metaResource.Regions["MetaData"].Children["MetaData"].First().Attributes)
         {
             var (k, v) = kvp;
@@ -114,14 +116,11 @@ public class FileProcessor
                     if (timeStampVal is null) break;
                     try
                     {
-                        gameSave.TimeStampInt = int.Parse(timeStampVal);
-                        // TODO Figure out how to parse actual dates
-                        // var timeStamp = DateTime.Parse(timeStampVal);
-                        // gameSave.TimeStamp = timeStamp;
+                        gameSave.CampaignDuration = new CampaignDuration(int.Parse(timeStampVal));
                     }
                     catch
                     {
-                        // don't worry about it. Maybe I'll handle this more gracefully later
+                        _logger.LogError("Failed to parse timestamp as campaign duration: {Value}",timeStampVal);
                     }
                     break;
                 case "GameID":
