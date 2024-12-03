@@ -1,17 +1,15 @@
 ﻿using System.Collections.ObjectModel;
-using System.IO;
 using System.Windows;
 using BG3SaveBrowser.Infrastructure.Services;
 using BG3SaveBrowser.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MessageBox = System.Windows.MessageBox;
-using Path = System.IO.Path;
 
 namespace BG3SaveBrowser.Views;
 public partial class MainWindow : Window
 {
-    private readonly FileProcessor _fileProcessor;
+    private readonly SavesDirectoryProcessor _savesDirectoryProcessor;
     private readonly DataExporter _dataExporter;
     private readonly ILogger<MainWindow> _logger;
     
@@ -21,14 +19,14 @@ public partial class MainWindow : Window
         // Set the window to full screen
         this.WindowState = WindowState.Maximized;
 
-        _fileProcessor = App.ServiceProvider.GetRequiredService<FileProcessor>();
+        _savesDirectoryProcessor = App.ServiceProvider.GetRequiredService<SavesDirectoryProcessor>();
         _dataExporter = App.ServiceProvider.GetRequiredService<DataExporter>();
         _logger = App.ServiceProvider.GetRequiredService<ILogger<MainWindow>>();
         
-        FilesListView.ItemsSource = Files;
+        FilesListView.ItemsSource = Saves;
     }
 
-    private ObservableCollection<GameSave> Files { get; set; } = new();
+    private ObservableCollection<GameSave> Saves { get; set; } = new();
 
     private async void BrowseButton_Click(object sender, RoutedEventArgs e)
     {
@@ -40,11 +38,8 @@ public partial class MainWindow : Window
         await LoadFiles(selectedPath);
     }
     
-    private async void ExportButton_Click(object sender, RoutedEventArgs e)
-    {
-        // Use DataExporter to export data to CSV and SQLite
-        await _dataExporter.ExportData(Files);
-    }
+    private async void ExportButton_Click(object sender, RoutedEventArgs e) => 
+        await _dataExporter.ExportData(Saves);
 
     private async Task LoadFiles(string directoryPath)
     {
@@ -62,14 +57,13 @@ public partial class MainWindow : Window
         try
         {
             // Run the file processing on a background thread
-            var files = await Task.Run(() => _fileProcessor.ProcessPath(directoryPath, progressReporter));
+            var saveData = await Task.Run(() => _savesDirectoryProcessor.ProcessPath(directoryPath, progressReporter));
 
-            // Add the processed files to the list
-            Files.Clear();
-            foreach (var file in files)
+            Saves.Clear();
+            foreach (var gameSave in saveData)
             {
-                // We add files one at a time to play nicely with the observable which has already been bound to the UI
-                Files.Add(file);
+                // We add saves one at a time to play nicely with the observable which has already been bound to the UI
+                Saves.Add(gameSave);
             }
         }
         catch (Exception ex)

@@ -25,8 +25,11 @@ public partial class App : Application
 
         // Register your services
         serviceCollection
-            .AddSingleton<FileProcessor>()
-            .AddSingleton<DataExporter>();
+            .AddSingleton<DataExporter>()
+            .AddSingleton<LsvFileProcessor>()
+            .AddSingleton<SaveProcessor>()
+            .AddSingleton<SavesDirectoryProcessor>()
+        ;
         
         serviceCollection.AddLogging(builder =>
         {

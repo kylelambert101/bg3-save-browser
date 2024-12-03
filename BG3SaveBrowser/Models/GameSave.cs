@@ -1,27 +1,30 @@
-﻿using System.Text.Json.Serialization;
-
-namespace BG3SaveBrowser.Models;
+﻿namespace BG3SaveBrowser.Models;
 
 public record GameSave
 {
-    // TODO make a respectable constructor and enforce non-null state on applicable properties
+    public string Path { get; set; }
+    public string ThumbnailPath { get; set; }
     
-    public string? Path { get; set; }
-    public string? ThumbnailPath { get; set; }
+    public string Owner { get; private init; }
+    public CampaignDuration? CampaignDuration { get; private init; } 
+    public string GameId { get; private init; }
+    public string GameSessionId { get; private init; }
+    public DateTime SaveTime { get; private init; }
+    public string SaveName { get; private init; }
+
+    public GameSave(string path, string thumbnailPath, LsvPackageData lsvData)
+    {
+        var campaignDuration = new CampaignDuration(int.Parse(lsvData.TimeStamp));
+        var saveTimeStamp = long.Parse(lsvData.SaveTime);
+        var saveTime = DateTimeOffset.FromUnixTimeSeconds(saveTimeStamp).DateTime;
     
-    // Comes from meta.lsf
-    public string? Owner { get; set; }
-
-    public CampaignDuration? CampaignDuration { get; set; } 
-    public string? GameId { get; set; }
-    public string? GameSessionId { get; set; }
-    public DateTime SaveTime { get; set; }
-
-    // Comes from SaveInfo.json
-    public string? SaveName { get; set; }
+        CampaignDuration = campaignDuration;
+        GameId = lsvData.GameId;
+        GameSessionId = lsvData.GameSessionId;
+        Owner = lsvData.LeaderName;
+        Path = path;
+        SaveName = lsvData.SaveName;
+        SaveTime = saveTime;
+        ThumbnailPath = thumbnailPath;
+    }
 }
-
-public record SaveInfo
-{
-    [JsonPropertyName("Save Name")]
-    public string? SaveName { get; set; }}
