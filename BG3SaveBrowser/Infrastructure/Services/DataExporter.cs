@@ -10,8 +10,13 @@ namespace BG3SaveBrowser.Infrastructure.Services;
 
 public class DataExporter
 {
-    private readonly ILogger<DataExporter> _logger = App.ServiceProvider.GetRequiredService<ILogger<DataExporter>>();
-    
+    private readonly ILogger<DataExporter> _logger;
+
+    public DataExporter()
+    {
+        _logger = App.ServiceProvider.GetRequiredService<ILogger<DataExporter>>();
+    }
+
     public async Task ExportData(ObservableCollection<GameSave> saves)
     {
         // Prompt user for save location
