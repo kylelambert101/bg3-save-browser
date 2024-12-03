@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.Security.Policy;
+using BG3SaveBrowser.Infrastructure.Mapping;
 using BG3SaveBrowser.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -7,10 +9,18 @@ namespace BG3SaveBrowser.Infrastructure.Services;
 
 public class SaveProcessor
 {
-    private readonly LsvFileProcessor _lsvFileProcessor = App.ServiceProvider.GetRequiredService<LsvFileProcessor>();
-    private readonly ILogger<SaveProcessor> _logger = App.ServiceProvider.GetRequiredService<ILogger<SaveProcessor>>();
+    private readonly GameSaveMapper _gameSaveMapper;
+    private readonly LsvFileProcessor _lsvFileProcessor;
+    private readonly ILogger<SaveProcessor> _logger;
+
+    public SaveProcessor()
+    {
+        _gameSaveMapper = App.ServiceProvider.GetRequiredService<GameSaveMapper>();
+        _lsvFileProcessor = App.ServiceProvider.GetRequiredService<LsvFileProcessor>();
+        _logger = App.ServiceProvider.GetRequiredService<ILogger<SaveProcessor>>();
+    }
     
-    public async Task<GameSave> ProcessSaveDirectory(string directory)
+    public async Task<GameSave?> ProcessSaveDirectory(string directory)
     {
         // Get all files in the directory
         var files = Directory.GetFiles(directory);
@@ -28,11 +38,7 @@ public class SaveProcessor
                 thumbnailPath = file;
             }
         }
-        
-        return new GameSave(
-            directory,
-            thumbnailPath ?? throw new ArgumentNullException(nameof(thumbnailPath)), 
-            lsvData ?? throw new ArgumentNullException(nameof(lsvData))
-        );
+
+        return _gameSaveMapper.TryMapGameSave(directory, thumbnailPath, lsvData);
     }
 }

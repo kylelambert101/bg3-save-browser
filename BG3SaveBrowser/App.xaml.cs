@@ -1,4 +1,5 @@
-﻿using BG3SaveBrowser.Infrastructure.Services;
+﻿using BG3SaveBrowser.Infrastructure.Mapping;
+using BG3SaveBrowser.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
@@ -26,6 +27,7 @@ public partial class App : Application
         // Register your services
         serviceCollection
             .AddSingleton<DataExporter>()
+            .AddSingleton<GameSaveMapper>()
             .AddSingleton<LsvFileProcessor>()
             .AddSingleton<SaveProcessor>()
             .AddSingleton<SavesDirectoryProcessor>()

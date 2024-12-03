@@ -19,7 +19,7 @@ public class SavesDirectoryProcessor
     public async Task<List<GameSave>> ProcessPath(string baseDirectory,
         IProgress<(int progress, string status)>? progress = null)
     {
-        var result = new List<GameSave>();
+        var allSaves = new List<GameSave>();
 
         // Ensure the directory exists
         if (!Directory.Exists(baseDirectory))
@@ -31,13 +31,14 @@ public class SavesDirectoryProcessor
         var totalSubdirectories = subdirectories.Length;
         var processedSubdirectories = 0;
 
+        _logger.LogInformation("Found {Count} saves in {Directory}", subdirectories.Length, baseDirectory);
         foreach (var subdirectory in subdirectories)
         {
             _logger.LogTrace("Processing directory {Dir}", subdirectory);
             try
             {
-                // Add to the result list
-                result.Add(await _saveProcessor.ProcessSaveDirectory(subdirectory));
+                var gameSave = await _saveProcessor.ProcessSaveDirectory(subdirectory);
+                if (gameSave != default) allSaves.Add(gameSave);
             }
             catch (Exception ex)
             {
@@ -48,7 +49,8 @@ public class SavesDirectoryProcessor
             var progressValue = (int)(processedSubdirectories++ / (double)totalSubdirectories * 100);
             progress?.Report((progressValue, $"Processing folder: {Path.GetFileName(subdirectory)}"));
         }
+        _logger.LogInformation("Loaded {Count} valid saves", allSaves.Count);
 
-        return result;
+        return allSaves;
     }
 }
