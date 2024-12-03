@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="BG3 Save Browser" Height="450" Width="1070">
     <Grid>
-        <!-- Top bar with Browse button -->
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Margin="10">
                 <Button Name="BrowseButton" Content="Browse" Width="75" Margin="0,0,10,0" Click="BrowseButton_Click" />
@@ -12,14 +11,18 @@
             </StackPanel>
 
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="10">
-                <ListView Name="FilesListView" Height="600"> <!-- Explicit height for scrolling -->
+                <ListView Name="FilesListView" Height="600" FontFamily="Consolas"> 
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Owner" DisplayMemberBinding="{Binding Owner}" Width="100" />
                             <GridViewColumn Header="Save Name" DisplayMemberBinding="{Binding SaveName}" Width="200" />
                             <GridViewColumn Header="Game Id" DisplayMemberBinding="{Binding GameId}" Width="200" />
                             <GridViewColumn Header="Game Session Id" DisplayMemberBinding="{Binding GameSessionId}" Width="200" />
-                            <GridViewColumn Header="Save Time" DisplayMemberBinding="{Binding SaveTime}" Width="200" />
+                            <GridViewColumn Header="Save Time" Width="200">
+                                <GridViewColumn.DisplayMemberBinding>
+                                    <Binding Path="SaveTime" StringFormat="MMM dd, yyyy h:mmtt" />
+                                </GridViewColumn.DisplayMemberBinding>
+                            </GridViewColumn>
                             <GridViewColumn Header="Campaign Duration" DisplayMemberBinding="{Binding CampaignDuration}" Width="125" />
                         </GridView>
                     </ListView.View>

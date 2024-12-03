@@ -15,7 +15,7 @@ public record GameSave
     public CampaignDuration? CampaignDuration { get; set; } 
     public string? GameId { get; set; }
     public string? GameSessionId { get; set; }
-    public long SaveTime { get; set; }
+    public DateTime SaveTime { get; set; }
 
     // Comes from SaveInfo.json
     public string? SaveName { get; set; }

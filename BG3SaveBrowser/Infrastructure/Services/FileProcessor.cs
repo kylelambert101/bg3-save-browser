@@ -134,7 +134,8 @@ public class FileProcessor
                     if (saveTimeVal is null) break;
                     try
                     {
-                        gameSave.SaveTime = long.Parse(saveTimeVal);
+                        var saveTimeStamp = long.Parse(saveTimeVal);
+                        gameSave.SaveTime = DateTimeOffset.FromUnixTimeSeconds(saveTimeStamp).DateTime;
                     }
                     catch
                     {
