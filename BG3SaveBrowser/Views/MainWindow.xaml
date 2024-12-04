@@ -3,6 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="BG3 Save Browser" Height="450" Width="1070">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+    
+    <Grid Grid.Row="0">
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Margin="10">
                 <Button Name="BrowseButton" Content="Browse" Width="75" Margin="0,0,10,0" Click="BrowseButton_Click" />
@@ -29,5 +35,7 @@
                 </ListView>
             </ScrollViewer>
         </StackPanel>
+    </Grid>
+        <RichTextBox Name="LogConsole" Grid.Row="1" IsReadOnly="True" VerticalScrollBarVisibility="Auto" />
     </Grid>
 </Window>

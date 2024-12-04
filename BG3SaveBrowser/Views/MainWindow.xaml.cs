@@ -1,9 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Documents;
 using BG3SaveBrowser.Infrastructure.Services;
 using BG3SaveBrowser.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
 
 namespace BG3SaveBrowser.Views;
@@ -77,5 +79,36 @@ public partial class MainWindow : Window
         }
     }
 
+    public void AppendLog(string message, LogLevel level)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            var paragraph = new Paragraph();
+            var textRange = new Run(message);
+            
+            // Set color based on log level
+            // switch (level)
+            // {
+            //     case LogLevel.Information:
+            //         textRange.Foreground = Brushes.Green;
+            //         break;
+            //     case LogLevel.Warning:
+            //         textRange.Foreground = Brushes.Orange;
+            //         break;
+            //     case LogLevel.Error:
+            //         textRange.Foreground = Brushes.Red;
+            //         break;
+            //     default:
+            //         textRange.Foreground = Brushes.Black;
+            //         break;
+            // }
+
+            paragraph.Inlines.Add(textRange);
+            LogConsole.Document.Blocks.Add(paragraph);
+
+            // Auto-scroll to the bottom
+            LogConsole.ScrollToEnd();
+        });
+    }
 
 }

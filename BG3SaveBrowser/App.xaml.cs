@@ -1,4 +1,5 @@
-﻿using BG3SaveBrowser.Infrastructure.Mapping;
+﻿using BG3SaveBrowser.Infrastructure.Logging;
+using BG3SaveBrowser.Infrastructure.Mapping;
 using BG3SaveBrowser.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -45,6 +46,7 @@ public partial class App : Application
             });
             builder.AddDebug();      // Add debug logging (visible in Output window)
             builder.SetMinimumLevel(LogLevel.Debug);
+            builder.AddProvider(new RichTextBoxLoggerProvider()) // can't feed in main window from here...
         });
         
         // Build the service provider
