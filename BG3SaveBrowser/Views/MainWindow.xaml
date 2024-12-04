@@ -3,31 +3,48 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="BG3 Save Browser" Height="450" Width="1070">
     <Grid>
-        <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <Button Name="BrowseButton" Content="Browse" Width="75" Margin="0,0,10,0" Click="BrowseButton_Click" />
-                <TextBox Name="DirectoryPathTextBox" Width="600" IsReadOnly="True" />
-                <Button Content="Export Data" Width="80" Click="ExportButton_Click" Margin="10,0,0,0"/>
-            </StackPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <Grid Margin="10">
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="75" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
+                
+                <Button Name="BrowseButton" Content="Browse"  Margin="0,0,10,0" Click="BrowseButton_Click"
+                        Grid.Column="0" />
+                <TextBox Name="DirectoryPathTextBox"  IsReadOnly="True" Grid.Column="1" />
+                <Button Content="Export Data" Click="ExportButton_Click" Margin="10,0,0,0" Grid.Column="2" />
+                
+            </Grid>
 
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="10">
-                <ListView Name="FilesListView" Height="600" FontFamily="Consolas"> 
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="10 10 10 20" Grid.Row="1">
+                <ListView Name="FilesListView" FontFamily="Consolas">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Owner" DisplayMemberBinding="{Binding Owner}" Width="100" />
                             <GridViewColumn Header="Save Name" DisplayMemberBinding="{Binding SaveName}" Width="200" />
                             <GridViewColumn Header="Game Id" DisplayMemberBinding="{Binding GameId}" Width="200" />
-                            <GridViewColumn Header="Game Session Id" DisplayMemberBinding="{Binding GameSessionId}" Width="200" />
+                            <GridViewColumn Header="Game Session Id" DisplayMemberBinding="{Binding GameSessionId}"
+                                            Width="200" />
                             <GridViewColumn Header="Save Time" Width="200">
                                 <GridViewColumn.DisplayMemberBinding>
                                     <Binding Path="SaveTime" StringFormat="MMM dd, yyyy h:mmtt" />
                                 </GridViewColumn.DisplayMemberBinding>
                             </GridViewColumn>
-                            <GridViewColumn Header="Campaign Duration" DisplayMemberBinding="{Binding CampaignDuration}" Width="125" />
+                            <GridViewColumn Header="Campaign Duration"
+                                            DisplayMemberBinding="{Binding CampaignDuration}" Width="125" />
                         </GridView>
                     </ListView.View>
                 </ListView>
             </ScrollViewer>
-        </StackPanel>
+        </Grid>
     </Grid>
 </Window>
