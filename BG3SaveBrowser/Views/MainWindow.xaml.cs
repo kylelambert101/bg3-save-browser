@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
+using System.Windows.Data;
 using BG3SaveBrowser.Infrastructure.Services;
 using BG3SaveBrowser.Models;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,10 +25,16 @@ public partial class MainWindow : Window
         _dataExporter = App.ServiceProvider.GetRequiredService<DataExporter>();
         _logger = App.ServiceProvider.GetRequiredService<ILogger<MainWindow>>();
         
+        // Initialize CollectionView for sorting
+        SavesView = CollectionViewSource.GetDefaultView(Saves);
+        SavesView.SortDescriptions.Add(new SortDescription(nameof(GameSave.GameSessionId), ListSortDirection.Ascending));
+        SavesView.SortDescriptions.Add(new SortDescription(nameof(GameSave.SaveTime), ListSortDirection.Ascending));
+        
         FilesListView.ItemsSource = Saves;
     }
 
     private ObservableCollection<GameSave> Saves { get; set; } = new();
+    private ICollectionView SavesView { get; set; }
 
     private async void BrowseButton_Click(object sender, RoutedEventArgs e)
     {
@@ -65,6 +73,8 @@ public partial class MainWindow : Window
                 // We add saves one at a time to play nicely with the observable which has already been bound to the UI
                 Saves.Add(gameSave);
             }
+
+            SavesView.Refresh(); // Ensure the sorting updates
         }
         catch (Exception ex)
         {
@@ -76,6 +86,5 @@ public partial class MainWindow : Window
             progressWindow.Close();
         }
     }
-
 
 }
