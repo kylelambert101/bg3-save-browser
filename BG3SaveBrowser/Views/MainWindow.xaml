@@ -32,7 +32,7 @@
 
 
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="10 10 10 20" Grid.Row="1">
-                <ListView Name="FilesListView" FontFamily="Consolas">
+                <ListView Name="FilesListView" FontFamily="Consolas" GridViewColumnHeader.Click="FilesListView_ColumnHeader_Click">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Owner" DisplayMemberBinding="{Binding Owner}" Width="100" />

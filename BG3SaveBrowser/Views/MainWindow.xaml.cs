@@ -1,11 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using BG3SaveBrowser.Infrastructure.Services;
 using BG3SaveBrowser.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Binding = System.Windows.Data.Binding;
 using MessageBox = System.Windows.MessageBox;
 
 namespace BG3SaveBrowser.Views;
@@ -86,5 +88,80 @@ public partial class MainWindow : Window
             progressWindow.Close();
         }
     }
+    
+    private void FilesListView_ColumnHeader_Click(object sender, RoutedEventArgs e)
+    {
+        _logger.LogDebug("Column header clicked.");
+
+        if (e.OriginalSource is GridViewColumnHeader header)
+        {
+            _logger.LogDebug("Header detected: {Header}", header.Content);
+
+            if (header.Column is GridViewColumn column)
+            {
+                if (column.DisplayMemberBinding is Binding binding)
+                {
+                    var columnName = binding.Path.Path;
+                    _logger.LogDebug("Sorting by column: {ColumnName}", columnName);
+                    ToggleSort(columnName);
+                }
+                else if (column.Header is string headerText)
+                {
+                    // Fallback: Try to use the column header text if binding is missing
+                    _logger.LogDebug("Column has no DisplayMemberBinding, falling back to header text: {HeaderText}", headerText);
+                    ToggleSort(headerText);
+                }
+                else
+                {
+                    _logger.LogDebug("Could not determine column binding or header text.");
+                }
+            }
+            else
+            {
+                _logger.LogDebug("No GridViewColumn found in header.");
+            }
+        }
+        else
+        {
+            _logger.LogDebug("Click event did not originate from a GridViewColumnHeader.");
+        }
+    }
+
+
+    private void ToggleSort(string columnName)
+    {
+        _logger.LogDebug("Toggling sort for: {ColumnName}", columnName);
+
+        var collectionView = CollectionViewSource.GetDefaultView(Saves);
+        if (collectionView == null)
+        {
+            _logger.LogDebug("CollectionView is null!");
+            return;
+        }
+
+        var existingSort = collectionView.SortDescriptions.FirstOrDefault(s => s.PropertyName == columnName);
+
+        ListSortDirection newDirection;
+        if (existingSort.PropertyName != null)
+        {
+            newDirection = existingSort.Direction == ListSortDirection.Ascending
+                ? ListSortDirection.Descending
+                : ListSortDirection.Ascending;
+            _logger.LogDebug("Existing sort found. Changing direction to {NewDirection}", newDirection);
+        }
+        else
+        {
+            newDirection = ListSortDirection.Ascending;
+            _logger.LogDebug("No existing sort found. Defaulting to ascending.");
+        }
+
+        collectionView.SortDescriptions.Clear();
+        collectionView.SortDescriptions.Add(new SortDescription(columnName, newDirection));
+        collectionView.Refresh();
+
+        _logger.LogDebug("Sorting applied: {ColumnName} {NewDirection}", columnName, newDirection);
+    }
+
+
 
 }
